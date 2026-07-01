@@ -249,6 +249,43 @@ body {
   padding: 2rem;
 }
 
+.support-note {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.support-note p {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+}
+
+.support-note-link {
+  display: inline-block;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius);
+  background: #ffdd00;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: background 0.15s ease;
+}
+
+.support-note-link:hover {
+  background: #ffd000;
+  color: #1a1a1a;
+}
+
+.view-app .support-note {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
 /* View-only share page */
 .view-page {
   min-height: 100vh;

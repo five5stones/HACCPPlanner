@@ -1,0 +1,11 @@
+.git
+.gitignore
+.cursor
+.vscode
+.idea
+__pycache__
+*.py[cod]
+data/library.json
+data/library.json.tmp
+*.md
+LICENSE

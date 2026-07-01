@@ -1,0 +1,15 @@
+services:
+  haccp-planner:
+    build: .
+    container_name: haccp-planner
+    ports:
+      - "${HACCP_PORT:-8765}:8765"
+    environment:
+      HACCP_HOST: 0.0.0.0
+      HACCP_PORT: 8765
+    volumes:
+      - haccp-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  haccp-data:

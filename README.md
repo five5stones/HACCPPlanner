@@ -5,6 +5,7 @@ A browser-based tool for building, managing, printing, and sharing **HACCP** (Ha
 No database required — plans are stored in a local JSON file and synced through a small Python server.
 
 ![Python 3](https://img.shields.io/badge/python-3.10+-blue.svg)
+![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ## Features
@@ -26,6 +27,30 @@ No database required — plans are stored in a local JSON file and synced throug
 - A modern web browser (Chrome, Firefox, Edge, Safari)
 
 ## Quick start
+
+### Docker (recommended)
+
+```bash
+git clone https://github.com/five5stones/HACCPPlanner.git
+cd HACCPPlanner
+docker compose up -d --build
+```
+
+Open **http://localhost:8765/** in your browser.
+
+Plans are stored in a Docker volume (`haccp-data`). To stop:
+
+```bash
+docker compose down
+```
+
+To run on a different host port (e.g. 9000):
+
+```bash
+HACCP_PORT=9000 docker compose up -d --build
+```
+
+### Python
 
 ```bash
 git clone https://github.com/five5stones/HACCPPlanner.git
@@ -57,6 +82,8 @@ HACCPPlanner/
 ├── index.html          # Main app (dashboard + plan builder)
 ├── view.html           # Read-only shared plan viewer
 ├── server.py           # Static file server + JSON API
+├── Dockerfile          # Container image
+├── docker-compose.yml  # One-command Docker deployment
 ├── css/style.css       # Styles and print layouts
 ├── js/
 │   ├── app.js          # Wizard, dashboard, preview UI
@@ -122,6 +149,28 @@ The server exposes a small JSON API:
 - **Cache:** browser `localStorage` for offline resilience
 
 Your plan data stays on your machine unless you deploy the server elsewhere or share export files / view links.
+
+## Docker
+
+| Command | Description |
+|---------|-------------|
+| `docker compose up -d --build` | Build and start in the background |
+| `docker compose logs -f` | Follow server logs |
+| `docker compose down` | Stop the container |
+| `docker compose down -v` | Stop and **delete** stored plans |
+
+### Backup data from Docker
+
+```bash
+docker compose exec haccp-planner cat /app/data/library.json > library-backup.json
+```
+
+Or mount a local folder instead of a named volume — add under `volumes` in `docker-compose.yml`:
+
+```yaml
+volumes:
+  - ./data:/app/data
+```
 
 ## Development
 

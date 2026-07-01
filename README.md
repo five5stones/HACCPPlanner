@@ -8,9 +8,15 @@ No database required — plans are stored in a local JSON file and synced throug
 ![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
-## Screenshot
+## Screenshots
+
+**Dashboard**
 
 ![HACCP Plan Manager dashboard](docs/screenshots/dashboard.jpg)
+
+**Plan builder & live preview**
+
+![HACCP plan builder with live table preview](docs/screenshots/plan-builder.jpg)
 
 ## Features
 

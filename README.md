@@ -8,6 +8,10 @@ No database required — plans are stored in a local JSON file and synced throug
 ![Docker](https://img.shields.io/badge/docker-ready-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
+## Screenshot
+
+![HACCP Plan Manager dashboard](docs/screenshots/dashboard.jpg)
+
 ## Features
 
 - **Document library** — create, duplicate, rename, and delete multiple HACCP plans
@@ -84,6 +88,7 @@ HACCPPlanner/
 ├── server.py           # Static file server + JSON API
 ├── Dockerfile          # Container image
 ├── docker-compose.yml  # One-command Docker deployment
+├── docs/screenshots/   # README screenshots
 ├── css/style.css       # Styles and print layouts
 ├── js/
 │   ├── app.js          # Wizard, dashboard, preview UI

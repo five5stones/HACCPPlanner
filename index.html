@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HACCP Plan Manager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Dashboard -->
+    <div id="view-dashboard" class="view view-active">
+      <header class="dashboard-hero">
+        <h1 id="app-title">HACCP Plan Manager</h1>
+        <p>Select an existing plan to view and edit, or create a new one.</p>
+      </header>
+
+      <main class="dashboard-main">
+        <div class="dashboard-toolbar">
+          <button type="button" id="btn-create-new" class="btn btn-primary btn-lg">+ Create new HACCP plan</button>
+          <button type="button" id="btn-import-dashboard" class="btn btn-ghost">Import JSON</button>
+          <button type="button" id="btn-open-admin" class="btn btn-ghost">Admin</button>
+        </div>
+
+        <h2 class="dashboard-section-title">Your HACCP plans</h2>
+        <div id="dashboard-grid" class="dashboard-grid"></div>
+        <p class="empty-hint dashboard-empty hidden" id="dashboard-empty">No plans yet. Create your first HACCP plan above.</p>
+      </main>
+    </div>
+
+    <!-- Builder -->
+    <div id="view-builder" class="view">
+    <header class="doc-header no-print">
+      <div class="header-inner">
+        <button type="button" id="btn-back-dashboard" class="btn btn-ghost btn-back">← Dashboard</button>
+        <div class="header-title-wrap">
+          <input type="text" id="header-title" class="header-title-input" aria-label="Document title" autocomplete="off">
+          <p class="subtitle" id="header-subtitle">Manage and edit your HACCP plans</p>
+        </div>
+      </div>
+      <div class="header-meta no-print">
+        <span class="version-badge" id="version-badge">Version 1</span>
+        <span class="last-modified" id="last-modified"></span>
+        <span class="save-status hidden" id="save-status" data-status="idle"></span>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="btn-open-admin-builder" class="btn btn-ghost no-print">Admin</button>
+        <button type="button" id="btn-import" class="btn btn-ghost">Import JSON</button>
+        <button type="button" id="btn-export-json" class="btn btn-ghost">Export JSON</button>
+        <button type="button" id="btn-share-link" class="btn btn-ghost no-print">View link</button>
+        <button type="button" id="btn-print" class="btn btn-primary">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="builder-panel no-print">
+        <nav class="step-indicator step-indicator-scroll" id="step-indicator" aria-label="Form progress"></nav>
+
+        <section id="panel-step-1" class="form-panel active">
+          <h2 id="panel-step-1-title">1. Process step</h2>
+          <p class="panel-hint" id="panel-step-1-hint">Name this stage in your production flow.</p>
+          <form id="form-process-step">
+            <div class="field">
+              <label for="process-step-name" id="process-step-name-label">Process step <span class="required">*</span></label>
+              <input type="text" id="process-step-name" placeholder="e.g. Receipt of Raw Materials" required autocomplete="off">
+            </div>
+            <div class="field field-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="process-step-is-ref">
+                This is a reference step (Ref. step)
+              </label>
+              <span class="field-note">Reference steps appear in the HACCP table only — they are not shown on the flow chart.</span>
+            </div>
+            <div id="process-step-flow-fields">
+              <div class="field">
+                <label for="process-step-no">Step no <span class="optional">(optional)</span></label>
+                <input type="number" id="process-step-no" min="1" step="1" placeholder="e.g. 2" autocomplete="off">
+              </div>
+              <div class="field field-checkbox">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="process-step-is-ccp">
+                  This process step is a CCP
+                </label>
+                <span class="field-note">Shows as e.g. 2 (CCP) when checked.</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Continue to hazards →</button>
+            </div>
+          </form>
+          <div class="existing-steps" id="existing-steps">
+            <h3>Process steps in this document</h3>
+            <ul id="steps-list" class="steps-list"></ul>
+            <p class="empty-hint" id="steps-empty">No process steps yet.</p>
+          </div>
+        </section>
+
+        <section id="panel-step-2" class="form-panel">
+          <h2>2. Hazards</h2>
+          <p class="panel-hint">For: <strong id="wizard-step-label">—</strong></p>
+          <p class="panel-hint">Add each hazard separately. You will set controls and monitoring in the next steps — one entry can cover all hazards.</p>
+          <div id="hazards-list" class="entry-list"></div>
+          <div class="form-actions">
+            <button type="button" id="btn-add-hazard-entry" class="btn btn-secondary">+ Add hazard</button>
+          </div>
+          <div class="form-actions stacked">
+            <button type="button" id="btn-save-hazards" class="btn btn-primary">Continue to control measures →</button>
+            <button type="button" id="btn-save-hazards-finish" class="btn btn-secondary hidden">Save and return to review</button>
+            <button type="button" id="btn-back-wizard-1" class="btn btn-ghost">← Back</button>
+          </div>
+        </section>
+
+        <section id="panel-column" class="form-panel">
+          <h2 id="column-panel-title">3. Control measures</h2>
+          <p class="panel-hint">For: <strong id="column-step-label">—</strong> · <span id="column-hazard-count">0 hazards</span></p>
+          <p class="panel-hint" id="column-panel-hint">Add one entry to apply across all hazards, or add multiple to split into separate rows.</p>
+          <div id="column-entries-list" class="entry-list"></div>
+          <div class="form-actions">
+            <button type="button" id="btn-add-column-entry" class="btn btn-secondary">+ Add another entry</button>
+          </div>
+          <div class="form-actions stacked">
+            <button type="button" id="btn-save-column" class="btn btn-primary">Continue →</button>
+            <button type="button" id="btn-save-column-finish" class="btn btn-secondary hidden">Save and return to review</button>
+            <button type="button" id="btn-back-column" class="btn btn-ghost">← Back</button>
+          </div>
+        </section>
+
+        <section id="panel-review" class="form-panel">
+          <h2>Review &amp; edit</h2>
+          <p class="panel-hint">Edit document details or any process step. Changes bump the version number.</p>
+          <form id="form-document-meta" class="meta-form">
+            <div class="field">
+              <label for="doc-title">Document title</label>
+              <input type="text" id="doc-title" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="doc-footnote">Footnote</label>
+              <textarea id="doc-footnote" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Save document details</button>
+            </div>
+          </form>
+
+          <div id="review-list" class="review-list"></div>
+          <div class="form-actions edit-actions">
+            <button type="button" id="btn-add-more" class="btn btn-primary">+ Add process step</button>
+            <button type="button" id="btn-add-ref-step" class="btn btn-secondary">+ Add reference step</button>
+            <button type="button" id="btn-reset-sample" class="btn btn-ghost hidden">Reset to PDF example</button>
+          </div>
+        </section>
+
+        <section id="panel-flowchart" class="form-panel">
+          <h2>Flow chart</h2>
+          <p class="panel-hint">Built automatically from your HACCP steps. Edit below to customise — saved edits won't be overwritten.</p>
+          <div class="field">
+            <label for="flowchart-title">Flow chart title</label>
+            <input type="text" id="flowchart-title" placeholder="e.g. Sandwich Production HACCP Flow Chart" autocomplete="off">
+          </div>
+          <div id="flowchart-editor" class="flowchart-editor"></div>
+          <div class="form-actions">
+            <button type="button" id="btn-add-flow-stage" class="btn btn-secondary">+ Add step</button>
+            <button type="button" id="btn-save-flowchart" class="btn btn-primary">Save flow chart</button>
+            <button type="button" id="btn-generate-flow-from-haccp" class="btn btn-ghost">Generate from HACCP steps</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="preview-panel">
+        <div class="preview-toolbar no-print">
+          <div class="preview-tabs">
+            <button type="button" class="preview-tab active" data-preview="haccp">HACCP plan</button>
+            <button type="button" class="preview-tab" data-preview="flowchart">Flow chart</button>
+          </div>
+          <span class="preview-count" id="preview-count">0 process steps · 0 hazards</span>
+        </div>
+
+        <article class="haccp-document preview-doc preview-doc-active" id="haccp-document">
+          <header class="document-title-block">
+            <h1 class="document-title" id="document-title">HACCP Plan</h1>
+            <p class="document-version-print" id="document-version-print">Version 1</p>
+          </header>
+          <div class="table-wrap">
+            <table class="haccp-table" id="haccp-table">
+              <thead>
+                <tr>
+                  <th class="col-ccp">No</th>
+                  <th class="col-step">Process Step</th>
+                  <th class="col-hazard">Hazard</th>
+                  <th class="col-control">Control Measures</th>
+                  <th class="col-limit">Critical Limit</th>
+                  <th class="col-monitor">Monitoring Procedure</th>
+                  <th class="col-freq">Frequency</th>
+                  <th class="col-corrective">Corrective Action</th>
+                  <th class="col-record">Record</th>
+                </tr>
+              </thead>
+              <tbody id="haccp-tbody">
+                <tr class="empty-row"><td colspan="9">Your HACCP table will appear here.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <footer class="document-footer" id="haccp-document-footer">
+            <p class="document-footnote" id="document-footnote"></p>
+            <p class="document-business-name" id="document-business-name"></p>
+          </footer>
+        </article>
+
+        <article class="flowchart-document preview-doc" id="flowchart-document">
+          <header class="document-title-block">
+            <h1 class="document-title" id="flowchart-doc-title">Flow Chart</h1>
+            <p class="document-version-print" id="flowchart-doc-version">Version 1</p>
+          </header>
+          <div id="flowchart-preview" class="flowchart-preview"></div>
+          <footer class="document-footer" id="flowchart-document-footer">
+            <p class="document-business-name" id="flowchart-business-name"></p>
+          </footer>
+        </article>
+      </section>
+    </main>
+    </div>
+  </div>
+
+  <dialog id="dialog-share-link" class="edit-dialog">
+    <div class="share-dialog-body">
+      <h3>View-only link</h3>
+      <p class="field-note">Anyone with this link can view the plan in read-only mode. They cannot edit it.</p>
+      <div class="field">
+        <label for="share-link-url">Link</label>
+        <div class="share-link-row">
+          <input type="text" id="share-link-url" readonly autocomplete="off">
+          <button type="button" class="btn btn-primary" id="btn-copy-share-link">Copy</button>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <a class="btn btn-ghost" id="btn-open-share-link" href="#" target="_blank" rel="noopener">Open in new tab</a>
+        <button type="button" class="btn btn-ghost" id="btn-close-share-link">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="dialog-admin-settings" class="edit-dialog">
+    <form id="form-admin-settings">
+      <h3>Admin</h3>
+      <div class="field">
+        <label for="admin-business-name">Business name</label>
+        <input type="text" id="admin-business-name" placeholder="e.g. Acme Bakery Ltd" autocomplete="organization">
+        <span class="field-note">Shown in the browser tab, document footers, and print headers for every plan.</span>
+      </div>
+      <p class="admin-save-hint hidden" id="admin-save-hint">Settings saved.</p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-admin">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-save-admin">Save settings</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialog-new-doc" class="edit-dialog">
+    <form id="form-new-doc" method="dialog">
+      <h3>Create new HACCP plan</h3>
+      <div class="field">
+        <label for="new-doc-title">Plan name</label>
+        <input type="text" id="new-doc-title" placeholder="e.g. Bakery Production HACCP" required autocomplete="off">
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-new-doc">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create &amp; open</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialog-rename-doc" class="edit-dialog">
+    <form id="form-rename-doc" method="dialog">
+      <h3>Rename HACCP plan</h3>
+      <div class="field">
+        <label for="rename-doc-title">Plan name</label>
+        <input type="text" id="rename-doc-title" required autocomplete="off">
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-rename-doc">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save name</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialog-edit-step" class="edit-dialog">
+    <form id="form-edit-step" method="dialog">
+      <h3>Edit process step</h3>
+      <div class="field">
+        <label for="edit-step-name">Process step name</label>
+        <input type="text" id="edit-step-name" required autocomplete="off">
+      </div>
+      <div class="field field-checkbox">
+        <label class="checkbox-label">
+          <input type="checkbox" id="edit-step-is-ref">
+          This is a reference step (Ref. step)
+        </label>
+      </div>
+      <div id="edit-step-flow-fields">
+        <div class="field">
+          <label for="edit-step-no">Step no</label>
+          <input type="number" id="edit-step-no" min="1" step="1" autocomplete="off">
+        </div>
+        <div class="field field-checkbox">
+          <label class="checkbox-label">
+            <input type="checkbox" id="edit-step-is-ccp">
+            This process step is a CCP
+          </label>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-edit-step">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+  <input type="file" id="import-file-dashboard" accept="application/json,.json" hidden>
+
+  <script src="js/sample-data.js"></script>
+  <script src="js/flowchart.js"></script>
+  <script src="js/haccp-render.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

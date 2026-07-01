@@ -1,0 +1,22 @@
+# Runtime data (user plans — created by server on first run)
+data/library.json
+data/library.json.tmp
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+
+# OS & editors
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+.cursor/

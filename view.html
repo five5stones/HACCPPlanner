@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HACCP Plan — View</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="view-page">
+  <div id="view-loading" class="view-page-state">
+    <p>Loading HACCP plan…</p>
+  </div>
+
+  <div id="view-error" class="view-page-state hidden">
+    <h1>Plan not found</h1>
+    <p id="view-error-message">This link may be invalid or the plan may have been removed.</p>
+    <a href="/" class="btn btn-primary">Go to HACCP Plan Manager</a>
+  </div>
+
+  <div id="view-app" class="view-app hidden">
+    <header class="view-page-header no-print">
+      <div class="view-page-header-inner">
+        <span class="view-only-badge">View only</span>
+        <p class="view-page-doc-name" id="view-header-name"></p>
+      </div>
+      <div class="view-page-actions">
+        <button type="button" id="btn-view-print" class="btn btn-primary">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <main class="view-page-main">
+      <div class="preview-toolbar no-print">
+        <div class="preview-tabs">
+          <button type="button" class="preview-tab active" data-preview="haccp">HACCP plan</button>
+          <button type="button" class="preview-tab" data-preview="flowchart">Flow chart</button>
+        </div>
+        <span class="preview-count" id="preview-count">0 process steps · 0 hazards</span>
+      </div>
+
+      <article class="haccp-document preview-doc preview-doc-active" id="haccp-document">
+        <header class="document-title-block">
+          <h1 class="document-title" id="document-title">HACCP Plan</h1>
+          <p class="document-version-print" id="document-version-print">Version 1</p>
+        </header>
+        <div class="table-wrap">
+          <table class="haccp-table" id="haccp-table">
+            <thead>
+              <tr>
+                <th class="col-ccp">No</th>
+                <th class="col-step">Process Step</th>
+                <th class="col-hazard">Hazard</th>
+                <th class="col-control">Control Measures</th>
+                <th class="col-limit">Critical Limit</th>
+                <th class="col-monitor">Monitoring Procedure</th>
+                <th class="col-freq">Frequency</th>
+                <th class="col-corrective">Corrective Action</th>
+                <th class="col-record">Record</th>
+              </tr>
+            </thead>
+            <tbody id="haccp-tbody">
+              <tr class="empty-row"><td colspan="9">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <footer class="document-footer" id="haccp-document-footer">
+          <p class="document-footnote" id="document-footnote"></p>
+          <p class="document-business-name" id="document-business-name"></p>
+        </footer>
+      </article>
+
+      <article class="flowchart-document preview-doc" id="flowchart-document">
+        <header class="document-title-block">
+          <h1 class="document-title" id="flowchart-doc-title">Flow Chart</h1>
+          <p class="document-version-print" id="flowchart-doc-version">Version 1</p>
+        </header>
+        <div id="flowchart-preview" class="flowchart-preview"></div>
+        <footer class="document-footer" id="flowchart-document-footer">
+          <p class="document-business-name" id="flowchart-business-name"></p>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <script src="js/sample-data.js"></script>
+  <script src="js/flowchart.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/haccp-render.js"></script>
+  <script src="js/view.js"></script>
+</body>
+</html>

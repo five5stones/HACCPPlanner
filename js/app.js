@@ -448,11 +448,32 @@ function renderStepsList() {
   });
 }
 
+function selectDocumentTheme(themeId) {
+  const d = doc();
+  if (!d) return;
+  const next = normalizeThemeId(themeId);
+  if (d.theme === next) return;
+  d.theme = next;
+  applyDocumentTheme(d);
+  syncThemePicker(next);
+  persist(false);
+}
+
+function ensureThemePicker() {
+  const container = document.getElementById('theme-picker');
+  if (!container) return;
+  if (container.dataset.ready) return;
+  container.dataset.ready = '1';
+  renderThemePicker(container, doc()?.theme, selectDocumentTheme);
+}
+
 function renderReview() {
   const review = document.getElementById('review-list');
   const d = doc();
   document.getElementById('doc-title').value = d.title;
   document.getElementById('doc-footnote').value = d.footnote || '';
+  ensureThemePicker();
+  syncThemePicker(d.theme);
 
   if (!d.processSteps.length) {
     review.innerHTML = '<p class="empty-hint">No process steps yet.</p>';
@@ -701,6 +722,7 @@ function renderAll() {
     renderDashboard();
     return;
   }
+  applyDocumentTheme(doc());
   renderHeader();
   renderTable();
   renderStepsList();

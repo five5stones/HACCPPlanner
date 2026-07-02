@@ -44,6 +44,7 @@ function createEmptyDocument(id, title = 'New HACCP Plan') {
     lastModified: new Date().toISOString(),
     processSteps: [],
     footnote: '',
+    theme: 'blue',
     flowChart: createEmptyFlowChart(),
   };
 }
@@ -268,6 +269,7 @@ const HaccpStore = {
 
   migrateDocument(doc) {
     if (!doc?.processSteps) return;
+    if (!doc.theme || !HACCP_THEME_IDS.includes(doc.theme)) doc.theme = 'blue';
     if (doc.id === 'sandwich' && !doc._sampleKey) doc._sampleKey = 'sandwich';
     this.ensureSandwichSampleFresh(doc);
     doc.processSteps.forEach((step) => {

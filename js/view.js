@@ -57,6 +57,7 @@ const ViewApp = {
     const d = this.doc;
     if (!d) return;
 
+    applyDocumentTheme(d);
     document.title = d.title ? `${d.title} — View` : 'HACCP Plan — View';
     document.getElementById('view-header-name').textContent = d.title || 'HACCP Plan';
 

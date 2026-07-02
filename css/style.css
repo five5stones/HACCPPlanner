@@ -1110,6 +1110,61 @@ input[type="number"]:focus {
   border-bottom: 1px solid var(--border-light);
 }
 
+.field-label-static {
+  display: block;
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 0.45rem;
+}
+
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.theme-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.35rem 0.5rem;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theme-swatch:hover {
+  border-color: #b8c5d4;
+}
+
+.theme-swatch--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.theme-swatch-chip {
+  display: block;
+  width: 100%;
+  height: 1.35rem;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--swatch-accent) 0 45%, var(--swatch-cell) 45% 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-swatch-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.theme-swatch--active .theme-swatch-label {
+  color: var(--accent);
+}
+
 .edit-dialog {
   border: none;
   border-radius: var(--radius);
@@ -1153,6 +1208,46 @@ input[type="number"]:focus {
   --haccp-cell-blue: #dce6f2;
   --haccp-cell-blue-alt: #d4e0f0;
   --haccp-border-white: #ffffff;
+}
+
+.haccp-document.theme-teal,
+.flowchart-document.theme-teal {
+  --haccp-title-blue: #2a9d8f;
+  --haccp-header-dark: #1a3330;
+  --haccp-cell-blue: #d4ece8;
+  --haccp-cell-blue-alt: #c8e4df;
+}
+
+.haccp-document.theme-forest,
+.flowchart-document.theme-forest {
+  --haccp-title-blue: #4a7c59;
+  --haccp-header-dark: #1f2e22;
+  --haccp-cell-blue: #dce8df;
+  --haccp-cell-blue-alt: #d0e0d4;
+}
+
+.haccp-document.theme-purple,
+.flowchart-document.theme-purple {
+  --haccp-title-blue: #7b68c4;
+  --haccp-header-dark: #2a2438;
+  --haccp-cell-blue: #e4dff0;
+  --haccp-cell-blue-alt: #dcd4ec;
+}
+
+.haccp-document.theme-slate,
+.flowchart-document.theme-slate {
+  --haccp-title-blue: #5a6a7a;
+  --haccp-header-dark: #1f252b;
+  --haccp-cell-blue: #e0e4e8;
+  --haccp-cell-blue-alt: #d4dae0;
+}
+
+.haccp-document.theme-burgundy,
+.flowchart-document.theme-burgundy {
+  --haccp-title-blue: #9e4b4b;
+  --haccp-header-dark: #2e1a1a;
+  --haccp-cell-blue: #ecd8d8;
+  --haccp-cell-blue-alt: #e4cccc;
 }
 
 .haccp-document {
